@@ -41,16 +41,32 @@ function validateAnswer(type, options, answer) {
     }
     return { valid: true, value: Object.fromEntries(entries) };
   }
-  if (type === 'ordering') {
-    if (!Array.isArray(answer)) return fail('Jawaban urutan harus berupa daftar elemen.');
-    const validIds = new Set((opts.items || []).map(o => String(o.id)));
+if (type === 'ordering') {
+    if (!Array.isArray(answer)) {
+      return fail('Jawaban urutan harus berupa daftar elemen.');
+    }
+
+    // Mendukung format options lama (array) dan format baru ({ items: [...] })
+    const items = Array.isArray(opts)
+      ? opts
+      : Array.isArray(opts.items)
+        ? opts.items
+        : [];
+
+    const validIds = new Set(
+      items.map(o => String(o?.id))
+    );
     const values = answer.map(String);
-    if (values.length > validIds.size || values.some(id => !validIds.has(id)) || new Set(values).size !== values.length) {
+
+    if (
+      values.length > validIds.size ||
+      values.some(id => !validIds.has(id)) ||
+      new Set(values).size !== values.length
+    ) {
       return fail('Daftar urutan tidak valid.');
     }
+
     return { valid: true, value: values };
   }
-  return fail('Jenis soal tidak dikenal.');
-}
 
 module.exports = { validateAnswer };
