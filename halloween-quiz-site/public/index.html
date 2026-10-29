@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#08070d"><meta name="description" content="CryptClass — sistem kuis kelas bertema Halloween.">
+  <title>CryptClass — Halloween Quiz</title><link rel="stylesheet" href="/style.css?v=nav-freeze-hotfix-20261029"><script src="/app.js?v=nav-freeze-hotfix-20261029" defer></script><script src="/fx.js?v=nav-freeze-hotfix-20261029" defer></script>
+</head>
+<body>
+  <div id="nightFX" class="night-fx" aria-hidden="true">
+    <div class="night-vignette"></div>
+    <div class="fog-layer fog-low"></div>
+    <div class="fog-layer fog-mid"></div>
+    <div class="flying-bat bat-arc-one"></div>
+    <div class="flying-bat bat-arc-two"></div>
+    <div class="ghost-float ghost-one"></div>
+    <span class="extra-spider spider-left"></span>
+    <div id="emberField" class="ember-field"></div>
+  </div>
+  <div class="ambient fog-a" aria-hidden="true"></div><div class="ambient fog-b" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="CryptClass beranda"><span class="brand-icon" aria-hidden="true">🎃</span><span>CRYPT<span class="accent">CLASS</span><small>HALLOWEEN QUIZ SYSTEM</small></span></a>
+    <div class="top-actions"><span class="live-dot"></span><span class="tiny hide-small">THE HAUNTED CLASSROOM</span><button class="button ghost" id="adminOpen">ADMIN ↗</button></div>
+  </header>
+  <main id="app" class="shell">
+    <aside id="adminSidebar" class="admin-sidebar" aria-label="Navigasi admin">
+      <div class="sidebar-topmark"><span class="sidebar-sigil">☾</span><div><strong>THE NIGHT WATCH</strong><small>CONTROL ROOM</small></div></div>
+      <div class="sidebar-status"><span class="status-flame"></span><span><strong>Portal aktif</strong><small>Semua sistem siap</small></span><span class="sidebar-status-icon">✦</span></div>
+      <nav class="sidebar-nav">
+        <button type="button" id="sideDashboard" data-side-nav="dashboard"><span class="nav-icon">⌂</span><span>Dashboard</span><span class="nav-chevron">›</span></button>
+        <button type="button" id="sideQuizzes" data-side-nav="quizzes"><span class="nav-icon">▤</span><span>Kelola Kuis</span><span class="nav-chevron">›</span></button>
+        <button type="button" id="sideCreate" data-side-nav="create"><span class="nav-icon">✎</span><span>Buat Kuis</span><span class="nav-chevron">›</span></button>
+        <button type="button" id="sideResults" data-side-nav="results"><span class="nav-icon">◈</span><span>Hasil & Analitik</span><span class="nav-chevron">›</span></button>
+      </nav>
+      <div class="sidebar-art" aria-hidden="true"><div class="sidebar-moon"></div><div class="sidebar-hill hill-back"></div><div class="sidebar-hill hill-front"></div><span class="sidebar-bat bat-a">✦</span><span class="sidebar-bat bat-b">⌁</span><span class="sidebar-pumpkin">🎃</span></div>
+      <div class="sidebar-quote"><span>“</span><p>Every question opens a door.<br>Not every door should be opened.</p><small>— THE ARCHIVIST</small></div>
+      <button type="button" id="sideHome" class="sidebar-home"><span>↖</span> Kembali ke beranda</button>
+    </aside>
+    <section id="home" class="hero page-section">
+      <div class="eyebrow"><span>✦</span> ONE CLASS. ONE HAUNTED NIGHT. <span>✦</span></div>
+      <h1>ENTER THE<br><span>UNKNOWN.</span></h1>
+      <p class="hero-copy">Pintu kelas berhantu telah terbuka. Masukkan kode kuis dan nama untuk memulai tantangan.</p>
+      <div class="join-card">
+        <div class="card-top"><span class="tiny">PARTICIPANT ACCESS</span><span class="tag">● PORTAL OPEN</span></div>
+        <form id="joinForm"><label for="joinCode">KODE KUIS</label><input id="joinCode" maxlength="16" autocomplete="off" placeholder="CONTOH: H7K2P9" required pattern="[A-Za-z0-9]{4,16}"><label for="joinName">NAMA PESERTA</label><input id="joinName" maxlength="80" autocomplete="name" placeholder="Nama lengkap" required><button class="button primary full" type="submit">MASUK KE KUIS <span>→</span></button><p id="joinError" class="error" role="alert"></p></form>
+        <div class="card-bottom"><span>✦ Tanpa akun</span><span>✦ Jawaban tersinkron ke server</span></div>
+      </div>
+      <div class="hero-foot"><span>01 / THE GATE</span><span class="moon">☾</span><span>EST. AFTER DARK</span></div>
+      <div class="decor-bat bat-one" aria-hidden="true">⋆</div><div class="decor-bat bat-two" aria-hidden="true">✦</div>
+    </section>
+
+    <section id="adminGate" class="panel hidden page-section">
+      <div class="section-head"><div><div class="eyebrow">ADMIN ONLY</div><h2>THE KEEPER'S GATE</h2></div><button class="button ghost" data-home>← Beranda</button></div>
+      <div id="setupWrap" class="narrow hidden"><p class="muted">Setup pertama kali: buat PIN admin dan kode pemulihan. Simpan kode pemulihan di tempat aman; website tidak dapat menampilkannya lagi.</p><form id="setupForm"><label for="setupPin">PIN ADMIN BARU</label><input id="setupPin" type="password" minlength="6" maxlength="64" autocomplete="new-password" required><label for="setupRecovery">KODE PEMULIHAN (10–100 KARAKTER)</label><input id="setupRecovery" type="password" minlength="10" maxlength="100" required autocomplete="off"><button class="button primary full" type="submit">BUAT ADMIN</button><p id="setupError" class="error"></p></form></div>
+      <div id="loginWrap" class="narrow hidden"><form id="loginForm"><label for="adminPin">PIN ADMIN</label><input id="adminPin" type="password" minlength="6" maxlength="64" autocomplete="current-password" required><button class="button primary full" type="submit">BUKA DASHBOARD →</button><p id="loginError" class="error" role="alert"></p></form><button id="showRecovery" class="link-button" type="button">Lupa PIN admin?</button></div>
+      <div id="recoveryWrap" class="narrow hidden"><p class="muted">Gunakan kode pemulihan yang dibuat saat setup untuk mengganti PIN. Semua sesi admin lama akan dicabut.</p><form id="recoveryForm"><label for="recoveryCode">KODE PEMULIHAN</label><input id="recoveryCode" type="password" minlength="10" required><label for="newPin">PIN ADMIN BARU</label><input id="newPin" type="password" minlength="6" maxlength="64" required><button class="button primary full" type="submit">RESET PIN</button><p id="recoveryError" class="error"></p></form><button id="backToLogin" class="link-button" type="button">Kembali ke login</button></div>
+    </section>
+
+    <section id="dashboard" class="panel hidden page-section">
+      <div class="section-head"><div><div class="eyebrow">CONTROL ROOM</div><h2>ADMIN DASHBOARD</h2><p class="muted">Perbarui otomatis saat kuis berlangsung.</p></div><button class="button ghost" id="logout">LOGOUT ↗</button></div>
+      <div id="globalStats" class="stats-grid"></div>
+      <div class="toolbar"><h3>DAFTAR KUIS</h3><div class="button-row"><button class="button ghost" id="backupDownload">BACKUP ↓</button><button class="button primary" id="newQuiz">+ BUAT KUIS</button></div></div>
+      <div class="filter-row"><label for="quizFilter">Tampilkan</label><select id="quizFilter"><option value="all">Semua kuis</option><option value="draft">Draf</option><option value="open">Berlangsung</option><option value="closed">Selesai</option><option value="archived">Arsip</option></select><button class="button ghost" id="backupRestoreOpen">PULIHKAN BACKUP</button><input type="file" id="backupFile" accept=".json,application/json" class="visually-hidden"></div>
+      <div id="backupPreview" class="notice hidden"></div><div id="quizList" class="quiz-list"></div><p id="adminMessage" class="notice" role="status"></p>
+    </section>
+
+    <section id="quizEditor" class="panel hidden page-section">
+      <div class="section-head"><div><div class="eyebrow">FORGE A CHALLENGE</div><h2 id="editorTitle">BUAT KUIS</h2></div><button class="button ghost" data-dashboard>← Dashboard</button></div>
+      <form id="quizForm">
+        <div class="form-grid">
+          <label>Judul kuis<input name="title" required maxlength="140"></label>
+          <label>Mata pelajaran<input name="subject" required maxlength="100"></label>
+          <label>Kode kuis buatan admin<input name="code" required minlength="4" maxlength="16" pattern="[A-Za-z0-9]+" autocomplete="off"><small>4–16 karakter huruf/angka, tanpa spasi. Kode harus unik.</small></label>
+          <label>Nama kelas<input name="class_name" required maxlength="100"></label>
+          <label>Tanggal kuis<input name="quiz_date" type="date" required></label>
+          <label>Nama guru<input name="teacher_name" required maxlength="100"></label>
+          <label class="wide">Deskripsi / instruksi<textarea name="description" rows="3" maxlength="3000" required></textarea></label>
+          <input type="hidden" name="question_type" id="questionType" value="single">
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar"><div><h3>SOAL & KUNCI JAWABAN</h3><p class="muted">Pilih jenis untuk setiap soal. Bobot semua soal sama; nilai akhir 0–100.</p></div><button type="button" class="button secondary" id="addQuestion">+ TAMBAH SOAL</button></div>
+        <div id="questionEditor" class="question-editor-list"></div>
+        <div class="divider"></div>
+        <details class="import-tools"><summary>Impor soal dari Excel/CSV atau teks</summary>
+          <div class="import-grid"><div><label for="importQuestionType">Jenis soal untuk impor<select id="importQuestionType"><option value="single">Pilihan ganda (5 opsi)</option><option value="multi">Pilihan jamak (5 opsi)</option><option value="truefalse">Benar / salah</option><option value="matching">Mencocokkan</option><option value="ordering">Mengurutkan</option></select></label><label for="importFile">Pilih file CSV / Excel (.csv, .xlsx, .xls)</label><input id="importFile" type="file" accept=".csv,.xlsx,.xls"><button class="button secondary" type="button" id="previewFile">PRATINJAU FILE</button><button class="button ghost" type="button" id="downloadTemplate">UNDUH TEMPLATE CSV</button></div>
+          <div><label for="pasteText">Atau tempel teks bernomor</label><textarea id="pasteText" rows="9" placeholder="1. Pertanyaan pertama?&#10;A. Opsi A&#10;B. Opsi B&#10;C. Opsi C&#10;D. Opsi D&#10;E. Opsi E&#10;Kunci: C"></textarea><button class="button secondary" type="button" id="previewPaste">PRATINJAU TEKS</button></div></div>
+          <div id="importPreview" class="import-preview hidden"></div>
+        </details>
+        <div class="editor-actions"><button type="submit" class="button primary" id="saveQuiz">SIMPAN KUIS & SOAL</button><button type="button" class="button ghost" data-dashboard>BATAL</button></div><p id="editorError" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="quizView" class="panel hidden page-section">
+      <div class="section-head"><div><div class="eyebrow">QUIZ CONTROL</div><h2 id="viewTitle">QUIZ DETAILS</h2></div><button class="button ghost" data-dashboard>← Dashboard</button></div>
+      <div id="quizDetails"></div><div id="quizActions" class="button-row action-row"></div>
+      <div class="toolbar"><h3>SOAL & KUNCI</h3><span class="muted">Kunci hanya terlihat admin.</span></div><div id="questionPreview"></div>
+      <div class="toolbar"><div><h3>LAPORAN & ANALITIK</h3><p class="muted">Leaderboard hanya terlihat admin.</p></div><div class="button-row"><label class="compact-label" for="exportType">Jenis</label><select id="exportType"><option value="all">Semua</option><option value="scores">Nilai</option><option value="answers">Jawaban</option><option value="questions">Analisis soal</option></select><label class="compact-label" for="exportFormat">Format</label><select id="exportFormat"><option value="xlsx">XLSX</option><option value="csv">CSV</option><option value="pdf">PDF</option></select><button id="exportReport" class="button secondary">EKSPOR ↓</button></div></div>
+      <div id="reportStats" class="stats-grid"></div><div id="questionAnalysis"></div><div class="toolbar"><h3>LEADERBOARD (ADMIN ONLY)</h3></div><div id="leaderboard"></div><div class="toolbar"><div><h3>DAFTAR PESERTA & RIWAYAT</h3><p class="muted" id="liveReportStatus">Data diperbarui saat halaman dibuka.</p></div><div class="button-row report-tools"><input id="participantSearch" type="search" placeholder="Cari nama peserta…" aria-label="Cari nama peserta"><select id="participantStatusFilter" aria-label="Filter status peserta"><option value="all">Semua status</option><option value="in_progress">Sedang mengerjakan</option><option value="completed">Selesai</option><option value="locked">Terkunci</option></select><button id="refreshReport" class="button secondary" type="button">SEGARKAN ↻</button></div></div><p id="participantFilterCount" class="muted small"></p><div id="report"></div><p id="viewMessage" class="notice" role="status"></p>
+    </section>
+
+    <section id="participantQuiz" class="panel hidden page-section">
+      <div class="quiz-head"><div><div class="eyebrow" id="participantSubject">CLASSROOM CHALLENGE</div><h2 id="participantTitle">THE TEST</h2><p id="participantInstructions"></p></div><div class="tag">AUTOSAVE <span id="saveState">● MENYIAPKAN</span></div></div>
+      <div class="progress-meta"><span>Progres jawaban</span><span id="progressText">0 / 0</span></div><div class="progress-wrap"><div id="progressBar"></div></div><div id="participantQuestions"></div>
+      <button id="submitQuiz" class="button primary full submit-wide">KIRIM JAWABAN →</button><p class="muted small-note">Jawaban yang belum diterima server tidak dapat dijamin terkirim. Tunggu indikator “Tersimpan di server” sebelum mengirim.</p><p id="participantError" class="error"></p>
+    </section>
+
+    <section id="miniGame" class="panel hidden page-section">
+      <div class="eyebrow">THE FINAL RITUAL</div><h2>MEMORY OF THE DAMNED</h2><p>Cocokkan empat pasangan simbol Halloween untuk membuka hasil kuis. Game ini tidak memengaruhi nilai akademik.</p><div id="memoryGrid" class="memory-grid"></div><p id="memoryStatus" class="notice" role="status">Temukan semua pasangan.</p><button id="showResult" class="button primary hidden">LIHAT HASIL →</button>
+    </section>
+
+    <section id="result" class="panel hidden page-section">
+      <div class="eyebrow">RITUAL COMPLETE</div><h2>YOUR HAUNTED SCORE</h2><p id="resultSub" class="muted"></p><div id="finalScore" class="final-score"></div><div id="resultStatuses"></div><button class="button ghost" data-home>KEMBALI KE BERANDA</button>
+    </section>
+  </main>
+  <footer><span>CRYPTCLASS © 2026</span><span>MAKE IT SPOOKY · KEEP IT FAIR</span></footer>
+  <dialog id="questionTypeDialog" class="type-picker-dialog">
+    <form method="dialog" id="questionTypeForm" class="type-picker-card">
+      <div class="eyebrow">SOAL BARU</div><h2>Pilih tipe soal</h2>
+      <p class="muted">Tipe ini hanya berlaku untuk pertanyaan yang akan ditambahkan.</p>
+      <label for="newQuestionType">Jenis soal<select id="newQuestionType"><option value="single">Pilihan ganda (5 opsi)</option><option value="multi">Pilihan jamak (5 opsi)</option><option value="truefalse">Benar / salah</option><option value="matching">Mencocokkan</option><option value="ordering">Mengurutkan</option></select></label>
+      <div class="button-row"><button class="button ghost" value="cancel">BATAL</button><button class="button primary" id="confirmAddQuestion" value="add">TAMBAHKAN SOAL</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

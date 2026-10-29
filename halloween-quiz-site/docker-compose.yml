@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: cryptclass
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - cryptclass_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cryptclass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgres://postgres:postgres@db:5432/cryptclass
+      PGSSL: "false"
+      SESSION_SECRET: local-docker-change-to-a-random-secret-at-least-32-chars
+      COOKIE_SECURE: "false"
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+volumes:
+  cryptclass_pgdata:
