@@ -432,7 +432,13 @@ async function getReport(quizId) {
   const questionAnalysis = qRows.map(q => {
     const per = [];
     participants.filter(p => p.score !== null).forEach(p => {
-      const result = (p.question_results || []).find(x => Number(x.questionId) === Number(q.id));
+      const results = Array.isArray(p.question_results)
+  ? p.question_results
+  : [];
+
+const result = results.find(
+  x => Number(x.questionId) === Number(q.id)
+);
       if (result && result.status !== 'unanswered') per.push(result);
     });
     const wrong = per.filter(x => x.status === 'wrong').length;
