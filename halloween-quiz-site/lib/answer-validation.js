@@ -69,4 +69,7 @@ if (type === 'ordering') {
     return { valid: true, value: values };
   }
 
+  return fail('Jenis soal tidak dikenal.');
+}
+
 module.exports = { validateAnswer };
