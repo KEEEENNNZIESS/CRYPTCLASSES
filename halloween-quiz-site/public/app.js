@@ -100,7 +100,9 @@ function renderQuizList(){
   const quizzes=state.quizzes.filter(q=>filter==='all'||q.status===filter);
   if(!quizzes.length){$('#quizList').innerHTML='<div class="notice">Belum ada kuis pada kategori ini. Buat kuis baru untuk memulai.</div>';return;}
   $('#quizList').innerHTML=quizzes.map(q=>`<article class="quiz-card"><div class="quiz-card-head"><div><h3>${esc(q.title)}</h3><p>${esc(q.subject)} · ${esc(q.class_name)}</p><p class="code">KODE ${esc(q.code)}</p></div><span class="status-pill status-${esc(q.status)}">${esc(STATUS_NAMES[q.status]||q.status)}</span></div><p>${esc(q.quiz_date)} · ${esc(q.teacher_name)}</p><p>${q.participant_count} peserta · ${q.completed_count} selesai · ${q.in_progress_count} berjalan</p><div class="quiz-card-actions"><button class="button secondary" data-view="${q.id}">BUKA DETAIL</button>${['draft','open'].includes(q.status)?`<button class="button ghost" data-edit="${q.id}">EDIT</button>`:''}</div></article>`).join('');
-  $$('[data-view]').forEach(b=>b.onclick=()=>viewQuiz(b.dataset.view));
+  $('#quizList').querySelectorAll('[data-view]').forEach(b=>{
+  b.onclick=()=>viewQuiz(b.dataset.view);
+});
   $$('[data-edit]').forEach(b=>b.onclick=async()=>{try{const q=await api(`/api/admin/quizzes/${b.dataset.edit}`);openEditor(q);}catch(e){toast(e.message);}});
 }
 $('#quizFilter').addEventListener('change',renderQuizList);
