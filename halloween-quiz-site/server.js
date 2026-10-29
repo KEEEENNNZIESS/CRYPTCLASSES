@@ -88,7 +88,20 @@ const safeQuiz = q => ({
   created_at: q.created_at, updated_at: q.updated_at, opened_at: q.opened_at,
   closed_at: q.closed_at, archived_at: q.archived_at
 });
-const publicQuestion = q => ({ id: Number(q.id), position: Number(q.position), prompt: q.prompt, image_url: q.image_url, question_type: q.question_type, options: q.options });
+const publicQuestion = q => {
+  let options = q.options;
+  if (q.question_type === 'ordering' && Array.isArray(options)) {
+    options = { items: options };
+  }
+  return {
+    id: Number(q.id),
+    position: Number(q.position),
+    prompt: q.prompt,
+    image_url: q.image_url,
+    question_type: q.question_type,
+    options
+  };
+};
 const sendError = (res, status, message, extra = {}) => res.status(status).json({ error: message, ...extra });
 
 async function audit(event, details = {}) {
