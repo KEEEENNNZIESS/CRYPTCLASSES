@@ -190,18 +190,45 @@ function normalizeQuestion(input, type, index) {
     options = { left: L, right: R };
     key = { pairs: Object.fromEntries(Object.entries(pairs).map(([k, v]) => [String(k), String(v)])) };
   } else if (type === 'ordering') {
-    const items = Array.isArray(options?.items) ? options.items : Array.isArray(options) ? options : [];
-    if (items.length < 2 || items.length > 10) throw new Error(`Soal ${index + 1}: ordering membutuhkan 2–10 elemen.`);
-    options = {
-  items: items.map((v, j) => ({
-    id: String(v?.id || `i${j + 1}`),
-    text: String(typeof v === 'string' ? v : v?.text || '').trim()
-  }))
-};
-    if (options.some(v => !v.text) || new Set(options.map(v => v.id)).size !== options.length) throw new Error(`Soal ${index + 1}: semua elemen ordering wajib diisi dan ID-nya unik.`);
-    const order = Array.isArray(key?.order) ? key.order.map(String) : Array.isArray(key) ? key.map(String) : [];
-    if (order.length !== options.length || new Set(order).size !== order.length || order.some(v => !options.some(o => o.id === v))) throw new Error(`Soal ${index + 1}: kunci urutan harus mencakup semua elemen tepat satu kali.`);
+    const items = Array.isArray(options?.items)
+      ? options.items
+      : Array.isArray(options)
+        ? options
+        : [];
+
+    if (items.length < 2 || items.length > 10) {
+      throw new Error(`Soal ${index + 1}: ordering membutuhkan 2–10 elemen.`);
+    }
+
+    const normalizedItems = items.map((v, j) => ({
+      id: String(v?.id || `i${j + 1}`),
+      text: String(typeof v === 'string' ? v : v?.text || '').trim()
+    }));
+
+    if (
+      normalizedItems.some(v => !v.text) ||
+      new Set(normalizedItems.map(v => v.id)).size !== normalizedItems.length
+    ) {
+      throw new Error(`Soal ${index + 1}: semua elemen ordering wajib diisi dan ID-nya unik.`);
+    }
+
+    const order = Array.isArray(key?.order)
+      ? key.order.map(String)
+      : Array.isArray(key)
+        ? key.map(String)
+        : [];
+
+    if (
+      order.length !== normalizedItems.length ||
+      new Set(order).size !== order.length ||
+      order.some(v => !normalizedItems.some(o => o.id === v))
+    ) {
+      throw new Error(`Soal ${index + 1}: kunci urutan harus mencakup semua elemen tepat satu kali.`);
+    }
+
+    options = { items: normalizedItems };
     key = { order };
+  }
   } else {
     throw new Error('Jenis soal tidak dikenal.');
   }
