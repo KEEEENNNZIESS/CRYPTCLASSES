@@ -228,7 +228,6 @@ function normalizeQuestion(input, type, index) {
 
     options = { items: normalizedItems };
     key = { order };
-  }
   } else {
     throw new Error('Jenis soal tidak dikenal.');
   }
