@@ -179,7 +179,12 @@ function normalizeQuestion(input, type, index) {
   } else if (type === 'ordering') {
     const items = Array.isArray(options?.items) ? options.items : Array.isArray(options) ? options : [];
     if (items.length < 2 || items.length > 10) throw new Error(`Soal ${index + 1}: ordering membutuhkan 2–10 elemen.`);
-    options = items.map((v, j) => ({ id: String(v?.id || `i${j + 1}`), text: String(typeof v === 'string' ? v : v?.text || '').trim() }));
+    options = {
+  items: items.map((v, j) => ({
+    id: String(v?.id || `i${j + 1}`),
+    text: String(typeof v === 'string' ? v : v?.text || '').trim()
+  }))
+};
     if (options.some(v => !v.text) || new Set(options.map(v => v.id)).size !== options.length) throw new Error(`Soal ${index + 1}: semua elemen ordering wajib diisi dan ID-nya unik.`);
     const order = Array.isArray(key?.order) ? key.order.map(String) : Array.isArray(key) ? key.map(String) : [];
     if (order.length !== options.length || new Set(order).size !== order.length || order.some(v => !options.some(o => o.id === v))) throw new Error(`Soal ${index + 1}: kunci urutan harus mencakup semua elemen tepat satu kali.`);
