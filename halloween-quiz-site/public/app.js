@@ -363,7 +363,19 @@ $('#joinForm').addEventListener('submit',async e=>{
   }catch(err){$('#joinError').textContent=err.message;}
 });
 function questionSignature(questions,quiz=null){return JSON.stringify({revision:quiz?.updated_at||'',questions:(questions||[]).map(q=>({id:q.id,position:q.position,prompt:q.prompt,image_url:q.image_url,question_type:q.question_type,options:q.options}))});}
-function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function shuffle(arr) {
+  if (!Array.isArray(arr)) {
+    console.error('Data untuk shuffle bukan array:', arr);
+    return [];
+  }
+
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 function displayQuestion(q){const type=q.question_type||state.quiz.question_type;const id=String(q.id);let html='';const answer=state.answers[id];
   if(type==='single'||type==='multi'){
     html=`<div class="answer-options">${q.options.map((o,i)=>{const checked=type==='multi'?(Array.isArray(answer)&&answer.map(String).includes(String(o.id))):String(answer??'')===String(o.id);return `<label class="answer-option"><input type="${type==='multi'?'checkbox':'radio'}" data-answer-option="${esc(o.id)}" name="ans-${id}" ${checked?'checked':''}><span><strong>${String.fromCharCode(65+i)}.</strong> ${esc(o.text)}</span></label>`;}).join('')}</div>`;
